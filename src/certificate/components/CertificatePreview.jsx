@@ -1,52 +1,84 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import CertificateTemplate from './CertificateTemplate';
-import { downloadCertificateAsPDF, downloadCertificateAsImage } from '../utils/downloadCertificate';
+import {
+  captureCertificate,
+  waitForCertificateAssets,
+  CERT_W,
+  CERT_H,
+  downloadCertificateAsPDF,
+  downloadCertificateAsImage,
+} from '../utils/downloadCertificate';
 import './CertificatePreview.css';
 
-const CERT_W = 1400;
-const CERT_H = 1004;
-
 export default function CertificatePreview({ data, isLoading = false }) {
-  const certRef = useRef(null);
-  const wrapperRef = useRef(null);
-  const certContainerRef = useRef(null);
+  const captureRef = useRef(null);
+  const canvasRef = useRef(null);
   const [downloading, setDownloading] = useState(false);
-  const [scale, setScale] = useState(1);
+  const [previewSrc, setPreviewSrc] = useState(null);
+  const [rendering, setRendering] = useState(false);
+  const [needsCapture, setNeedsCapture] = useState(false);
 
   useEffect(() => {
-    const updateScale = () => {
-      // Measure the exact container that clips the scaled certificate.
-      // Using wrapper width can overestimate on mobile because of padding.
-      const availableWidth = certContainerRef.current
-        ? certContainerRef.current.clientWidth
-        : window.innerWidth;
-      const newScale = Math.min(1, availableWidth / CERT_W);
-      setScale(newScale);
-    };
-
-    updateScale();
-
-    let observer;
-    if (certContainerRef.current && typeof ResizeObserver !== 'undefined') {
-      observer = new ResizeObserver(updateScale);
-      observer.observe(certContainerRef.current);
+    if (!data) {
+      setPreviewSrc(null);
+      setNeedsCapture(false);
+      canvasRef.current = null;
+      return;
     }
 
-    window.addEventListener('resize', updateScale);
-    window.addEventListener('orientationchange', updateScale);
+    setPreviewSrc(null);
+    canvasRef.current = null;
+    setNeedsCapture(true);
+    setRendering(true);
+  }, [data]);
+
+  useLayoutEffect(() => {
+    if (!needsCapture || !data) return;
+
+    let cancelled = false;
+
+    async function buildPreview() {
+      const root = captureRef.current;
+      if (!root) {
+        setRendering(false);
+        return;
+      }
+
+      await waitForCertificateAssets(root);
+      await new Promise((resolve) => requestAnimationFrame(resolve));
+
+      if (cancelled) return;
+
+      const canvas = await captureCertificate(captureRef);
+      if (cancelled || !canvas) return;
+
+      canvasRef.current = canvas;
+      setPreviewSrc(canvas.toDataURL('image/png'));
+      setNeedsCapture(false);
+      setRendering(false);
+    }
+
+    buildPreview().catch(() => {
+      if (!cancelled) {
+        setNeedsCapture(false);
+        setRendering(false);
+      }
+    });
 
     return () => {
-      window.removeEventListener('resize', updateScale);
-      window.removeEventListener('orientationchange', updateScale);
-      if (observer) observer.disconnect();
+      cancelled = true;
     };
-  }, []);
+  }, [needsCapture, data]);
 
   async function handleDownloadPDF() {
     setDownloading(true);
     try {
       const name = 'kiran_shankar';
-      await downloadCertificateAsPDF(certRef, `${name}_certificate.pdf`);
+      await downloadCertificateAsPDF(
+        captureRef,
+        `${name}_certificate.pdf`,
+        canvasRef.current
+      );
     } finally {
       setDownloading(false);
     }
@@ -56,7 +88,11 @@ export default function CertificatePreview({ data, isLoading = false }) {
     setDownloading(true);
     try {
       const name = 'kiran_shankar';
-      await downloadCertificateAsImage(certRef, `${name}_certificate.png`);
+      await downloadCertificateAsImage(
+        captureRef,
+        `${name}_certificate.png`,
+        canvasRef.current
+      );
     } finally {
       setDownloading(false);
     }
@@ -89,48 +125,57 @@ export default function CertificatePreview({ data, isLoading = false }) {
     );
   }
 
-  const scaledHeight = Math.round(CERT_H * scale);
-
   return (
-    <div className="preview-wrapper" ref={wrapperRef}>
+    <div className="preview-wrapper">
+      {/* Template mounts only while rasterizing, then is removed from the DOM */}
+      {needsCapture && (
+        <div
+          ref={captureRef}
+          className="certificate-capture-host"
+          aria-hidden="true"
+        >
+          <div style={{ width: CERT_W, height: CERT_H }}>
+            <CertificateTemplate data={data} />
+          </div>
+        </div>
+      )}
+
       <div className="preview-toolbar">
         <span className="preview-label">Certificate Preview</span>
         <div className="preview-actions">
           <button
             className="btn-download btn-pdf"
             onClick={handleDownloadPDF}
-            disabled={downloading}
+            disabled={downloading || rendering || !previewSrc}
           >
             {downloading ? 'Preparing…' : '↓ Download PDF'}
           </button>
           <button
             className="btn-download btn-img"
             onClick={handleDownloadImage}
-            disabled={downloading}
+            disabled={downloading || rendering || !previewSrc}
           >
             {downloading ? 'Preparing…' : '↓ Download PNG'}
           </button>
         </div>
       </div>
 
-      {/* Outer box: shrinks to scaled height so no empty space below */}
-      <div
-        className="preview-cert-container"
-        ref={certContainerRef}
-        style={{ height: scaledHeight }}
-      >
-        {/* Inner box: always 1400×1004, scaled via transform */}
-        <div
-          ref={certRef}
-          style={{
-            width: CERT_W,
-            height: CERT_H,
-            transformOrigin: 'top left',
-            transform: `scale(${scale})`,
-          }}
-        >
-          <CertificateTemplate data={data} />
-        </div>
+      <div className="preview-cert-container">
+        {previewSrc ? (
+          <img
+            src={previewSrc}
+            alt="Certificate of completion"
+            className="preview-cert-image"
+            width={CERT_W}
+            height={CERT_H}
+            draggable={false}
+          />
+        ) : (
+          <div className="cert-loading preview-cert-loading">
+            <div className="cert-spinner" />
+            <span>Rendering certificate…</span>
+          </div>
+        )}
       </div>
 
       <p className="preview-hint">

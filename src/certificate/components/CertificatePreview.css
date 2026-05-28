@@ -81,11 +81,32 @@
 }
 
 /* ── Certificate container ── */
-/* Width always fills available space; height is set dynamically via JS scale */
 .preview-cert-container {
   width: 100%;
-  overflow: hidden;
+  max-width: 1400px;
   position: relative;
+}
+
+.preview-cert-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.preview-cert-loading {
+  min-height: 280px;
+}
+
+/* Off-screen host used only for rasterizing the certificate */
+.certificate-capture-host {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 1400px;
+  height: 1004px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* ── Hint ── */

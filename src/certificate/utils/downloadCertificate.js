@@ -2,38 +2,39 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 const A4_LANDSCAPE = { width: 297, height: 210 };
-// Certificate natural dimensions (matches .v116_8 in CSS)
-const CERT_W = 1400;
-const CERT_H = 1004;
+export const CERT_W = 1400;
+export const CERT_H = 1004;
 
-async function captureCertificate(elementRef) {
-  const el = elementRef.current;
+const CAPTURE_SELECTOR = '[data-certificate-capture]';
+
+export async function waitForCertificateAssets(rootEl) {
+  if (!rootEl) return;
+
+  if (document.fonts?.ready) {
+    await document.fonts.ready;
+  }
+
+  const images = Array.from(rootEl.querySelectorAll('img'));
+  await Promise.all(
+    images.map(
+      (img) =>
+        new Promise((resolve) => {
+          if (img.complete) {
+            resolve();
+            return;
+          }
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        })
+    )
+  );
+}
+
+export async function captureCertificate(elementRef) {
+  const el = elementRef?.current;
   if (!el) return null;
 
-  // el is the scale-wrapper div (has transform: scale(x) on mobile).
-  // certEl is the actual 1400×1004 certificate inside it.
-  const certEl = el.querySelector('.v116_8') || el;
-
-  // ── Save current styles ──────────────────────────────────────────────────
-  const prevWrapperTransform       = el.style.transform;
-  const prevWrapperTransformOrigin = el.style.transformOrigin;
-  const prevWrapperWidth           = el.style.width;
-  const prevWrapperHeight          = el.style.height;
-  const prevCertWidth              = certEl.style.width;
-  const prevCertHeight             = certEl.style.height;
-
-  // ── Strip mobile scale so html2canvas sees full-size element ─────────────
-  // If the parent has transform: scale(0.28), html2canvas captures a tiny
-  // image even when width/height are set to 1400×1004.
-  el.style.transform       = 'none';
-  el.style.transformOrigin = 'top left';
-  el.style.width           = `${CERT_W}px`;
-  el.style.height          = `${CERT_H}px`;
-  certEl.style.width       = `${CERT_W}px`;
-  certEl.style.height      = `${CERT_H}px`;
-
-  // Force a reflow so the browser applies the new styles before capture
-  el.getBoundingClientRect();
+  const certEl = el.querySelector(CAPTURE_SELECTOR) || el;
 
   const canvas = await html2canvas(certEl, {
     scale: 2,
@@ -49,19 +50,15 @@ async function captureCertificate(elementRef) {
     scrollY: 0,
   });
 
-  // ── Restore original styles ──────────────────────────────────────────────
-  el.style.transform       = prevWrapperTransform;
-  el.style.transformOrigin = prevWrapperTransformOrigin;
-  el.style.width           = prevWrapperWidth;
-  el.style.height          = prevWrapperHeight;
-  certEl.style.width       = prevCertWidth;
-  certEl.style.height      = prevCertHeight;
-
   return canvas;
 }
 
-export async function downloadCertificateAsPDF(elementRef, filename = 'certificate.pdf') {
-  const canvas = await captureCertificate(elementRef);
+export async function downloadCertificateAsPDF(
+  elementRef,
+  filename = 'certificate.pdf',
+  existingCanvas = null
+) {
+  const canvas = existingCanvas || (await captureCertificate(elementRef));
   if (!canvas) return;
 
   const imgData = canvas.toDataURL('image/png');
@@ -93,8 +90,12 @@ export async function downloadCertificateAsPDF(elementRef, filename = 'certifica
   pdf.save(filename);
 }
 
-export async function downloadCertificateAsImage(elementRef, filename = 'certificate.png') {
-  const canvas = await captureCertificate(elementRef);
+export async function downloadCertificateAsImage(
+  elementRef,
+  filename = 'certificate.png',
+  existingCanvas = null
+) {
+  const canvas = existingCanvas || (await captureCertificate(elementRef));
   if (!canvas) return;
 
   const link = document.createElement('a');

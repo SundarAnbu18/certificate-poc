@@ -580,7 +580,7 @@ export default function CertificateTemplate() {
         }
       `}</style>
 
-      <div className="v116_8">
+      <div className="v116_8" data-certificate-capture>
         <div className="v116_9"></div>
         <div className="v116_14"></div>
         <div className="v116_15"></div>
