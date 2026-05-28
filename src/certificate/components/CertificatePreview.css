@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+
+/* ── Page shell ── */
+.preview-wrapper {
+  min-height: 100vh;
+  background: #f0ede6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 20px 48px;
+  box-sizing: border-box;
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+/* ── Toolbar ── */
+.preview-toolbar {
+  width: 100%;
+  max-width: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.preview-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ── Buttons ── */
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  border: none;
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+.btn-download:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-pdf {
+  background: #E8751A;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(232,117,26,0.35);
+}
+
+.btn-pdf:not(:disabled):hover {
+  background: #c9620f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(232,117,26,0.45);
+}
+
+.btn-img {
+  background: #fff;
+  color: #E8751A;
+  border: 1.5px solid #E8751A;
+}
+
+.btn-img:not(:disabled):hover {
+  background: #fff5ee;
+  transform: translateY(-1px);
+}
+
+/* ── Certificate container ── */
+/* Width always fills available space; height is set dynamically via JS scale */
+.preview-cert-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Hint ── */
+.preview-hint {
+  margin-top: 14px;
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+}
+
+/* ── Spinner ── */
+.cert-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #eee;
+  border-top-color: #E8751A;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .preview-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .preview-wrapper {
+    padding: 16px 10px 32px;
+  }
+}

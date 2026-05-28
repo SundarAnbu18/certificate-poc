@@ -1,0 +1,24 @@
+{
+  "certificateId": "69cb7df35e1131d0a401a7d1",
+  "title": "CERTIFICADO DE FINALIZACIÓN – BÁSICO",
+  "subtitle": "Por la presente se certifica que",
+  "candidateName": "Sundar Anbu",
+  "organization": "AU Foundation",
+  "courseName": "JobReady: Employability Skills",
+  "level": "básico",
+  "completionDate": "febrero 27, 2026",
+  "completionHours": 75,
+  "footerText": "Este certificado confirma la finalización de {hours} de capacitación.",
+  "qrScanLabel": "ESCANEAR Y VERIFICAR",
+  "qrVerifyUrl": "https://dev.certificate.wfglobal.org/en/certificate?certificateId=69cb7df35e1131d0a401a7d1",
+  "issuer": {
+    "name": "Ajay Kela",
+    "title": "CEO",
+    "organization": "Wadhwani Foundation",
+    "signatureFont": "Dancing Script"
+  },
+  "logoUrl": null,
+  "starImageUrl": null,
+  "language": "es",
+  "bodyTemplate": "Ha completado exitosamente {courseName} en el nivel {level} en la fecha de {completionDate}"
+}

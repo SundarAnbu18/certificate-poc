@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Libre+Baskerville:wght@400;700&family=Open+Sans:wght@300;400;600;700;800&display=swap');
+
+/* ─────────────────────────────────────────────
+   OUTER WRAP — constrains max width, centers
+───────────────────────────────────────────── */
+.cert-wrap {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  /* Maintain A4 landscape ratio: 297 × 210 */
+  aspect-ratio: 297 / 210;
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+/* ─────────────────────────────────────────────
+   THICK ORANGE OUTER BORDER
+───────────────────────────────────────────── */
+.cert-outer-border {
+  width: 100%;
+  height: 100%;
+  background-color: #E8751A;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* ─────────────────────────────────────────────
+   THIN ORANGE INNER BORDER  (sits just inside outer)
+───────────────────────────────────────────── */
+.cert-inner-border {
+  width: 100%;
+  height: 100%;
+  background-color: #f9f8f2;
+  border: 1.5px solid #E8751A;
+  box-sizing: border-box;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ─────────────────────────────────────────────
+   BODY LAYOUT  — left panel + right panel
+───────────────────────────────────────────── */
+.cert-body-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─────────────────────────────────────────────
+   LEFT PANEL  — fixed 230px keeps right panel wide enough
+───────────────────────────────────────────── */
+.cert-left-panel {
+  flex: 0 0 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26px 12px 12px 18px;
+  border-right: 1px solid #dedad2;
+  overflow: hidden;
+}
+
+.cert-logo-wrap {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-logo-img {
+  max-width: 160px;
+  width: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.cert-star-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.cert-star-img {
+  width: 130px;
+  object-fit: contain;
+}
+
+/* Decorative lines — in flow at bottom, aligned left */
+.cert-deco-wrap {
+  align-self: flex-start;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────
+   RIGHT PANEL  (≈72% width)
+───────────────────────────────────────────── */
+.cert-right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 42px 22px 38px;
+  overflow: hidden;
+}
+
+/* ── Title ── */
+.cert-title {
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-weight: 800;
+  font-size: clamp(13px, 2.4vw, 27px);
+  color: #E8751A;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 18px 0;
+  line-height: 1.2;
+}
+
+/* ── Subtitle ── */
+.cert-subtitle {
+  font-size: clamp(9px, 1.05vw, 12.5px);
+  font-weight: 400;
+  color: #333;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+/* ── Name block ── */
+.cert-name-block {
+  margin-bottom: 12px;
+}
+
+.cert-candidate-name {
+  display: block;
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: clamp(18px, 2.5vw, 28px);
+  font-weight: 700;
+  color: #111;
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+
+.cert-name-rule {
+  height: 1.5px;
+  background: #444;
+  width: 100%;
+  max-width: 460px;
+}
+
+/* ── Org line ── */
+.cert-org-line {
+  font-size: clamp(9px, 1.1vw, 13px);
+  color: #222;
+  margin: 10px 0 8px;
+  font-weight: 400;
+}
+
+.cert-org-line strong {
+  font-weight: 700;
+}
+
+/* ── Body text ── */
+.cert-body-text {
+  font-size: clamp(9px, 1.15vw, 13.5px);
+  color: #222;
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+.cert-body-text strong {
+  font-weight: 700;
+  color: #111;
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER ROW  — signature | note | QR
+───────────────────────────────────────────── */
+.cert-footer-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 3%;
+  margin-top: auto;
+  padding-top: 2%;
+}
+
+/* ── Signature ── */
+.cert-sig-block {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  min-width: 130px;
+}
+
+.cert-sig-script {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(22px, 2.8vw, 32px);
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.cert-sig-rule {
+  height: 1px;
+  background: #444;
+  width: 100%;
+  max-width: 160px;
+  margin-bottom: 4px;
+}
+
+.cert-sig-name {
+  font-size: clamp(9px, 1.05vw, 12px);
+  font-weight: 700;
+  color: #111;
+  display: block;
+}
+
+.cert-sig-role {
+  font-size: clamp(8px, 0.9vw, 10.5px);
+  color: #555;
+  display: block;
+  font-weight: 400;
+}
+
+.cert-sig-org {
+  font-size: clamp(8px, 0.9vw, 10.5px);
+  color: #555;
+  display: block;
+  font-weight: 400;
+}
+
+/* ── Footer note ── */
+.cert-footer-note {
+  font-size: clamp(7px, 0.85vw, 10px);
+  color: #555;
+  text-align: center;
+  flex: 1;
+  margin: 0;
+  line-height: 1.45;
+  align-self: flex-end;
+}
+
+/* ── QR block ── */
+.cert-qr-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.cert-qr-label {
+  font-size: clamp(6px, 0.7vw, 8.5px);
+  color: #666;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ─────────────────────────────────────────────
+   LOADING / EMPTY STATES
+───────────────────────────────────────────── */
+.cert-loading,
+.cert-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  font-family: 'Open Sans', sans-serif;
+  color: #999;
+  gap: 14px;
+  font-size: 15px;
+}
+
+.cert-spinner {
+  width: 34px;
+  height: 34px;
+  border: 3px solid #ebebeb;
+  border-top-color: #E8751A;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────────── */
+@media (max-width: 850px) {
+  .cert-outer-border {
+    padding: 10px;
+  }
+  .cert-left-panel {
+    width: 26%;
+  }
+}
+
+@media (max-width: 600px) {
+  .cert-wrap {
+    aspect-ratio: unset;
+  }
+  .cert-body-layout {
+    flex-direction: column;
+  }
+  .cert-left-panel {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 4% 5%;
+    gap: 5%;
+    border-right: none;
+    border-bottom: 1px solid #e8e4d8;
+  }
+  .cert-deco-wrap {
+    display: none;
+  }
+  .cert-footer-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .cert-footer-note {
+    text-align: left;
+  }
+}
