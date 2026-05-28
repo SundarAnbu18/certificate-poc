@@ -1,5 +1,13 @@
 import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
+import { certificateAsset } from '../utils/certificateAssets';
+
+const LOGO_URL = certificateAsset('/logo.png');
+const SIGNATURE_URL = certificateAsset('/Ajay_Kela_SIgnature.png');
+const BG1_URL = certificateAsset('/assets/bg-1.png');
+const BG2_URL = certificateAsset('/assets/bg-2.png');
+const STAR_URL = certificateAsset('/assets/star-1.png');
+const GREY_STAR_URL = certificateAsset('/assets/grey-star-2.png');
 
 export default function CertificateTemplate() {
   return (
@@ -372,7 +380,7 @@ export default function CertificateTemplate() {
         .v116_46 {
           width: 148px;
           height: 73px;
-          background: url("https://nextgenfileservicedev1.blob.core.windows.net/certificate-templates/logo.png");
+          background: url("${LOGO_URL}");
           background-repeat: no-repeat;
           background-position: center center;
           background-size: cover;
@@ -479,7 +487,7 @@ export default function CertificateTemplate() {
         .v122_38 {
           width: 129px;
           height: 52px;
-          background: url("https://nextgenfileservicedev1.blob.core.windows.net/certificate-templates/Ajay_Kela_SIgnature.png");
+          background: url("${SIGNATURE_URL}");
           background-repeat: no-repeat;
           background-position: center center;
           background-size: cover;
@@ -588,10 +596,10 @@ export default function CertificateTemplate() {
 
         <div className="v116_12">
           <div className="v116_12_a">
-            <img src="https://nextgenfileservicedev1.blob.core.windows.net/certificate-templates/assets/bg-1.png" alt="bg-1" />
+            <img src={BG1_URL} alt="" crossOrigin="anonymous" />
           </div>
           <div className="v116_12_b">
-            <img src="https://nextgenfileservicedev1.blob.core.windows.net/certificate-templates/assets/bg-2.png" alt="bg-2" />
+            <img src={BG2_URL} alt="" crossOrigin="anonymous" />
           </div>
         </div>
 
@@ -625,7 +633,7 @@ export default function CertificateTemplate() {
             <div className="v116_39_body">
               <div className="v116_39_body_left">
                 <div className="v116_39_body_icon">
-                  <img src="https://nextgenfileservicedev1.blob.core.windows.net/certificate-templates/assets/star-1.png" alt="star" />
+                  <img src={STAR_URL} alt="" crossOrigin="anonymous" />
                 </div>
                 <div className="v116_39_body_text">
                   <span className="v116_39_body_text_heading">Certificate of Completion – Advanced:</span>
@@ -634,7 +642,7 @@ export default function CertificateTemplate() {
               </div>
               <div className="v116_39_body_right">
                 <div className="v116_39_body_icon">
-                  <img src="https://nextgenfileservicedev1.blob.core.windows.net/certificate-templates/assets/grey-star-2.png" alt="grey-star" />
+                  <img src={GREY_STAR_URL} alt="" crossOrigin="anonymous" />
                 </div>
                 <div className="v116_39_body_text">
                   <span className="v116_39_body_text_heading">Certificate of Completion – Basic:</span>
